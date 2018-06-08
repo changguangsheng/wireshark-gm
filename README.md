@@ -5,8 +5,8 @@
 
 暂时只有CentOS的
 
---linux|
+      --linux|
 
-      --src.rpm
-      
-      --rpm
+            --src.rpm
+         
+            --rpm
