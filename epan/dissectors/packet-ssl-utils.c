@@ -65,6 +65,7 @@ const value_string ssl_version_short_names[] = {
     { SSLV2_VERSION,        "SSLv2" },
     { SSLV3_VERSION,        "SSLv3" },
     { TLSV1_VERSION,        "TLSv1" },
+    { GMSSLV1_VERSION,      "GMSSLv1" },
     { TLSV1DOT1_VERSION,    "TLSv1.1" },
     { TLSV1DOT2_VERSION,    "TLSv1.2" },
     { TLSV1DOT3_VERSION,    "TLSv1.3" },
@@ -79,6 +80,7 @@ const value_string ssl_versions[] = {
     { SSLV2_VERSION,        "SSL 2.0" },
     { SSLV3_VERSION,        "SSL 3.0" },
     { TLSV1_VERSION,        "TLS 1.0" },
+    { GMSSLV1_VERSION,      "GMSSL 1.0" },
     { TLSV1DOT1_VERSION,    "TLS 1.1" },
     { TLSV1DOT2_VERSION,    "TLS 1.2" },
     { TLSV1DOT3_VERSION,    "TLS 1.3" },
@@ -1139,7 +1141,8 @@ const value_string pct_cipher_type[] = {
     { PCT_CIPHER_RC2, "RC2" },
     { PCT_CIPHER_RC4, "RC4" },
     { PCT_CIPHER_DES_112, "DES 112 bit" },
-    { PCT_CIPHER_DES_168, "DES 168 bit" },
+    { PCT_CIPHER_SM1, "SM1 128 bit" },
+    { PCT_CIPHER_SM4, "SM4 128 bit" },
     { 0x00, NULL }
 };
 
@@ -1149,6 +1152,7 @@ const value_string pct_hash_type[] = {
     { PCT_HASH_SHA, "SHA"},
     { PCT_HASH_SHA_TRUNC_80, "SHA_TRUNC_80"},
     { PCT_HASH_DES_DM, "DES_DM"},
+    { PCT_HASH_SM3, "SM3"},
     { 0x00, NULL }
 };
 
@@ -1163,6 +1167,8 @@ const value_string pct_sig_type[] = {
     { PCT_SIG_RSA_MD5, "MD5" },
     { PCT_SIG_RSA_SHA, "RSA SHA" },
     { PCT_SIG_DSA_SHA, "DSA SHA" },
+    { PCT_SIG_ECC, "ECC SM2" },
+    { PCT_SIG_ECDHE, "ECDHE SM2" },
     { 0x00, NULL }
 };
 
@@ -1284,6 +1290,7 @@ const value_string tls_hash_algorithm[] = {
     { 4, "SHA256" },
     { 5, "SHA384" },
     { 6, "SHA512" },
+    { 7, "SM3" },
     { 0, NULL }
 };
 
@@ -1292,6 +1299,7 @@ const value_string tls_signature_algorithm[] = {
     { 1, "RSA" },
     { 2, "DSA" },
     { 3, "ECDSA" },
+    { 4, "SM2"},
     { 0, NULL }
 };
 
@@ -2405,18 +2413,18 @@ static const SslCipherSuite cipher_suites[]={
     {0xCCAD,KEX_DHE_PSK,        ENC_CHACHA20,   DIG_SHA256, MODE_POLY1305 }, /* TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256 */
     {0xCCAE,KEX_RSA_PSK,        ENC_CHACHA20,   DIG_SHA256, MODE_POLY1305 }, /* TLS_RSA_PSK_WITH_CHACHA20_POLY1305_SHA256 */
     /* GM */
-    {0xCCAF,KEX_ECDHE_SM2,      ENC_SM1,        DIG_SM3,    MOD_CBC},        /* ECDHE_SM1_SM3 */
-    {0xCCB0,KEX_ECC_SM2,        ENC_SM1,        DIG_SM3,    MOD_CBC},        /* ECC_SM1_SM3 */
-    {0xCCB1,KEX_IBSDH_SM9,      ENC_SM1,        DIG_SM3,    MOD_CBC},        /* IBSDH_SM1_SM3 */
-    {0xCCB2,KEX_IBC_SM9,        ENC_SM1,        DIG_SM3,    MOD_CBC},        /* IBC_SM1_SM3 */
-    {0xCCB3,KEX_RSA,            ENC_SM1,        DIG_SM3,    MOD_CBC},        /* RSA_SM1_SM3 */
-    {0xCCB4,KEX_RSA,            ENC_SM1,        DIG_SHA,    MOD_CBC},        /* RSA_SM1_SHA1 */
-    {0xCCB5,KEX_ECDHE_SM2,      ENC_SM4,        DIG_SM3,    MOD_CBC},        /* ECDHE_SM4_SM3 */
-    {0xCCB6,KEX_ECC_SM2,        ENC_SM4,        DIG_SM3,    MOD_CBC},        /* ECC_SM4_SM3 */
-    {0xCCB7,KEX_IBSDH_SM9,      ENC_SM4,        DIG_SM3,    MOD_CBC},        /* IBSDH_SM4_SM3 */
-    {0xCCB8,KEX_IBC_SM9,        ENC_SM4,        DIG_SM3,    MOD_CBC},        /* IBC_SM4_SM3 */
-    {0xCCB9,KEX_RSA,            ENC_SM4,        DIG_SM3,    MOD_CBC},        /* RSA_SM4_SM3 */
-    {0xCCBA,KEX_RSA,            ENC_SM4,        DIG_SHA,    MOD_CBC},        /* RSA_SM4_SHA1 */
+    {0xCCAF,KEX_ECDHE_SM2,      ENC_SM1,        DIG_SM3,    MODE_CBC},        /* ECDHE_SM1_SM3 */
+    {0xCCB0,KEX_ECC_SM2,        ENC_SM1,        DIG_SM3,    MODE_CBC},        /* ECC_SM1_SM3 */
+    {0xCCB1,KEX_IBSDH_SM9,      ENC_SM1,        DIG_SM3,    MODE_CBC},        /* IBSDH_SM1_SM3 */
+    {0xCCB2,KEX_IBC_SM9,        ENC_SM1,        DIG_SM3,    MODE_CBC},        /* IBC_SM1_SM3 */
+    {0xCCB3,KEX_RSA,            ENC_SM1,        DIG_SM3,    MODE_CBC},        /* RSA_SM1_SM3 */
+    {0xCCB4,KEX_RSA,            ENC_SM1,        DIG_SHA,    MODE_CBC},        /* RSA_SM1_SHA1 */
+    {0xCCB5,KEX_ECDHE_SM2,      ENC_SM4,        DIG_SM3,    MODE_CBC},        /* ECDHE_SM4_SM3 */
+    {0xCCB6,KEX_ECC_SM2,        ENC_SM4,        DIG_SM3,    MODE_CBC},        /* ECC_SM4_SM3 */
+    {0xCCB7,KEX_IBSDH_SM9,      ENC_SM4,        DIG_SM3,    MODE_CBC},        /* IBSDH_SM4_SM3 */
+    {0xCCB8,KEX_IBC_SM9,        ENC_SM4,        DIG_SM3,    MODE_CBC},        /* IBC_SM4_SM3 */
+    {0xCCB9,KEX_RSA,            ENC_SM4,        DIG_SM3,    MODE_CBC},        /* RSA_SM4_SM3 */
+    {0xCCBA,KEX_RSA,            ENC_SM4,        DIG_SHA,    MODE_CBC},        /* RSA_SM4_SHA1 */
     {-1,    0,                  0,              0,          MODE_STREAM}
 };
 
@@ -2729,6 +2737,7 @@ prf(SslDecryptSession *ssl, StringInfo *secret, const gchar *usage,
         return ssl3_prf(secret, usage, rnd1, rnd2, out, out_len);
 
     case TLSV1_VERSION:
+    case GMSSLV1_VERSION:
     case TLSV1DOT1_VERSION:
     case DTLSV1DOT0_VERSION:
     case DTLSV1DOT0_OPENSSL_VERSION:
@@ -3212,6 +3221,7 @@ ssl_generate_pre_master_secret(SslDecryptSession *ssl_session,
          */
         if (ssl_session->cipher_suite->kex == KEX_RSA &&
            (ssl_session->session.version == TLSV1_VERSION ||
+            ssl_session->session.version == GMSSLV1_VERSION ||
             ssl_session->session.version == TLSV1DOT1_VERSION ||
             ssl_session->session.version == TLSV1DOT2_VERSION ||
             ssl_session->session.version == DTLSV1DOT0_VERSION ||
@@ -3316,6 +3326,7 @@ ssl_generate_keyring_material(SslDecryptSession*ssl_session)
 
             switch(ssl_session->session.version) {
             case TLSV1_VERSION:
+            case GMSSLV1_VERSION:
             case TLSV1DOT1_VERSION:
             case DTLSV1DOT0_VERSION:
             case DTLSV1DOT0_OPENSSL_VERSION:
@@ -4276,7 +4287,7 @@ ssl_decrypt_record(SslDecryptSession *ssl, SslDecoder *decoder, guint8 ct, guint
             ssl_debug_printf("ssl_decrypt_record: mac ok\n");
         }
     }
-    else if(ssl->session.version==TLSV1_VERSION || ssl->session.version==TLSV1DOT1_VERSION || ssl->session.version==TLSV1DOT2_VERSION){
+    else if(ssl->session.version==TLSV1_VERSION || ssl->session.version==GMSSLV1_VERSION  || ssl->session.version==TLSV1DOT1_VERSION || ssl->session.version==TLSV1DOT2_VERSION){
         if(tls_check_mac(decoder,ct,ssl->session.version,mac_frag,mac_fraglen,mac)< 0) {
             if(ignore_mac_failed) {
                 ssl_debug_printf("ssl_decrypt_record: mac failed, but ignored for troubleshooting ;-)\n");
@@ -7302,6 +7313,7 @@ ssl_try_set_version(SslSession *session, SslDecryptSession *ssl,
     switch (version) {
     case SSLV3_VERSION:
     case TLSV1_VERSION:
+    case GMSSLV1_VERSION:
     case TLSV1DOT1_VERSION:
     case TLSV1DOT2_VERSION:
     case TLSV1DOT3_VERSION:

@@ -93,12 +93,16 @@ typedef enum {
 #define PCT_CIPHER_RC4                 0x04
 #define PCT_CIPHER_DES_112             0x05
 #define PCT_CIPHER_DES_168             0x06
+#define PCT_CIPHER_SM1                 0x07
+#define PCT_CIPHER_SM4                 0x08
+
 
 #define PCT_HASH_MD5                   0x0001
 #define PCT_HASH_MD5_TRUNC_64          0x0002
 #define PCT_HASH_SHA                   0x0003
 #define PCT_HASH_SHA_TRUNC_80          0x0004
 #define PCT_HASH_DES_DM                0x0005
+#define PCT_HASH_SM3                   0x0006
 
 #define PCT_CERT_NONE                  0x00
 #define PCT_CERT_X509                  0x01
@@ -108,6 +112,9 @@ typedef enum {
 #define PCT_SIG_RSA_MD5                0x0001
 #define PCT_SIG_RSA_SHA                0x0002
 #define PCT_SIG_DSA_SHA                0x0003
+#define PCT_SIG_ECC                    0x0004
+#define PCT_SIG_ECDHE                  0x0005
+
 
 #define PCT_EXCH_RSA_PKCS1             0x01
 #define PCT_EXCH_RSA_PKCS1_TOKEN_DES   0x02
