@@ -7994,7 +7994,7 @@ ssl_dissect_hnd_cert_req(ssl_common_dissect_t *hf, tvbuff_t *tvb, packet_info *p
         }
     }
 
-    if (session->version == TLSV1DOT2_VERSION || session->version == DTLSV1DOT2_VERSION ||
+    if (session->version == GMSSLV1_VERSION || session->version == TLSV1DOT2_VERSION || session->version == DTLSV1DOT2_VERSION ||
             (is_tls13 && (draft_version > 0 && draft_version < 19))) {
         offset = ssl_dissect_hash_alg_list(hf, tvb, tree, pinfo, offset, offset_end);
     }
