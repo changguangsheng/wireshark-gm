@@ -662,6 +662,7 @@ const value_string ssl_31_client_certificate_type[] = {
     { 64, "ECDSA Sign" },
     { 65, "RSA Fixed ECDH" },
     { 66, "ECDSA Fixed ECDH" },
+    { 80, "IBC Params" },
     { 0x00, NULL }
 };
 
@@ -1119,6 +1120,19 @@ static const value_string ssl_31_ciphersuite[] = {
     { 0xfeff, "SSL_RSA_FIPS_WITH_3DES_EDE_CBC_SHA" },
     { 0xffe0, "SSL_RSA_FIPS_WITH_3DES_EDE_CBC_SHA" },
     { 0xffe1, "SSL_RSA_FIPS_WITH_DES_CBC_SHA"},
+    /* GM */
+    { 0Xe001, "ECDHE_SM1_SM3"},
+    { 0Xe003, "ECC_SM1_SM3"},
+    { 0Xe005, "IBSDH_SM1_SM3"},
+    { 0Xe007, "IBC_SM1_SM3"},
+    { 0Xe009, "RSA_SM1_SM3"},
+    { 0Xe00a, "RSA_SM1_SHA1"},
+    { 0Xe011, "ECDHE_SM4_SM3"},
+    { 0Xe013, "IBSDH_SM4_SM3"},
+    { 0Xe015, "ECDHE_SM4_SM3"},
+    { 0Xe017, "IBC_SM4_SM3"},
+    { 0Xe019, "RSA_SM4_SM3"},
+    { 0Xe01a, "RSA_SM4_SHA1"},
     /* note that ciphersuites 0xff00 - 0xffff are private */
     { 0x00, NULL }
 };
@@ -1294,7 +1308,7 @@ const value_string tls_hash_algorithm[] = {
     { 0, NULL }
 };
 
-const value_string tls_signature_algorithm[] = {
+const value_string tls_signature_alfgorithm[] = {
     { 0, "Anonymous" },
     { 1, "RSA" },
     { 2, "DSA" },
@@ -2413,18 +2427,18 @@ static const SslCipherSuite cipher_suites[]={
     {0xCCAD,KEX_DHE_PSK,        ENC_CHACHA20,   DIG_SHA256, MODE_POLY1305 }, /* TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256 */
     {0xCCAE,KEX_RSA_PSK,        ENC_CHACHA20,   DIG_SHA256, MODE_POLY1305 }, /* TLS_RSA_PSK_WITH_CHACHA20_POLY1305_SHA256 */
     /* GM */
-    {0xCCAF,KEX_ECDHE_SM2,      ENC_SM1,        DIG_SM3,    MODE_CBC},        /* ECDHE_SM1_SM3 */
-    {0xCCB0,KEX_ECC_SM2,        ENC_SM1,        DIG_SM3,    MODE_CBC},        /* ECC_SM1_SM3 */
-    {0xCCB1,KEX_IBSDH_SM9,      ENC_SM1,        DIG_SM3,    MODE_CBC},        /* IBSDH_SM1_SM3 */
-    {0xCCB2,KEX_IBC_SM9,        ENC_SM1,        DIG_SM3,    MODE_CBC},        /* IBC_SM1_SM3 */
-    {0xCCB3,KEX_RSA,            ENC_SM1,        DIG_SM3,    MODE_CBC},        /* RSA_SM1_SM3 */
-    {0xCCB4,KEX_RSA,            ENC_SM1,        DIG_SHA,    MODE_CBC},        /* RSA_SM1_SHA1 */
-    {0xCCB5,KEX_ECDHE_SM2,      ENC_SM4,        DIG_SM3,    MODE_CBC},        /* ECDHE_SM4_SM3 */
-    {0xCCB6,KEX_ECC_SM2,        ENC_SM4,        DIG_SM3,    MODE_CBC},        /* ECC_SM4_SM3 */
-    {0xCCB7,KEX_IBSDH_SM9,      ENC_SM4,        DIG_SM3,    MODE_CBC},        /* IBSDH_SM4_SM3 */
-    {0xCCB8,KEX_IBC_SM9,        ENC_SM4,        DIG_SM3,    MODE_CBC},        /* IBC_SM4_SM3 */
-    {0xCCB9,KEX_RSA,            ENC_SM4,        DIG_SM3,    MODE_CBC},        /* RSA_SM4_SM3 */
-    {0xCCBA,KEX_RSA,            ENC_SM4,        DIG_SHA,    MODE_CBC},        /* RSA_SM4_SHA1 */
+    {0xe001,KEX_ECDHE_SM2,      ENC_SM1,        DIG_SM3,    MODE_CBC},        /* ECDHE_SM1_SM3 */
+    {0xe003,KEX_ECC_SM2,        ENC_SM1,        DIG_SM3,    MODE_CBC},        /* ECC_SM1_SM3 */
+    {0xe005,KEX_IBSDH_SM9,      ENC_SM1,        DIG_SM3,    MODE_CBC},        /* IBSDH_SM1_SM3 */
+    {0xe007,KEX_IBC_SM9,        ENC_SM1,        DIG_SM3,    MODE_CBC},        /* IBC_SM1_SM3 */
+    {0xe009,KEX_RSA,            ENC_SM1,        DIG_SM3,    MODE_CBC},        /* RSA_SM1_SM3 */
+    {0xe00a,KEX_RSA,            ENC_SM1,        DIG_SHA,    MODE_CBC},        /* RSA_SM1_SHA1 */
+    {0xe011,KEX_ECDHE_SM2,      ENC_SM4,        DIG_SM3,    MODE_CBC},        /* ECDHE_SM4_SM3 */
+    {0xe013,KEX_ECC_SM2,        ENC_SM4,        DIG_SM3,    MODE_CBC},        /* ECC_SM4_SM3 */
+    {0xe015,KEX_IBSDH_SM9,      ENC_SM4,        DIG_SM3,    MODE_CBC},        /* IBSDH_SM4_SM3 */
+    {0xe017,KEX_IBC_SM9,        ENC_SM4,        DIG_SM3,    MODE_CBC},        /* IBC_SM4_SM3 */
+    {0xe019,KEX_RSA,            ENC_SM4,        DIG_SM3,    MODE_CBC},        /* RSA_SM4_SM3 */
+    {0xe01a,KEX_RSA,            ENC_SM4,        DIG_SHA,    MODE_CBC},        /* RSA_SM4_SHA1 */
     {-1,    0,                  0,              0,          MODE_STREAM}
 };
 
