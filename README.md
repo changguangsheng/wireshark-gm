@@ -1,5 +1,9 @@
-## About GMSSL
+## About Wireshark(gm version)
 个人修改的wireshark，支持国密SSL，主要是修改ssl对应的dessertor
+
+release里面有较新的自己编译的exe
+
+CentOS分支里有CentOS6.5可用的rpm（但估计不会再更新，主要是CentOS上的wireshark太老了）
 
 如果要自己编译的话可以参考https://github.com/pengtianabc/wireshark-build.
 
