@@ -1308,7 +1308,7 @@ const value_string tls_hash_algorithm[] = {
     { 0, NULL }
 };
 
-const value_string tls_signature_alfgorithm[] = {
+const value_string tls_signature_algorithm[] = {
     { 0, "Anonymous" },
     { 1, "RSA" },
     { 2, "DSA" },
@@ -4186,6 +4186,7 @@ ssl_decrypt_record(SslDecryptSession *ssl, SslDecoder *decoder, guint8 ct, guint
         guint blocksize = 0;
 
         switch (ssl->session.version) {
+        case GMSSLV1_VERSION:
         case TLSV1DOT1_VERSION:
         case TLSV1DOT2_VERSION:
         case DTLSV1DOT0_VERSION:
@@ -7994,7 +7995,7 @@ ssl_dissect_hnd_cert_req(ssl_common_dissect_t *hf, tvbuff_t *tvb, packet_info *p
         }
     }
 
-    if (session->version == GMSSLV1_VERSION || session->version == TLSV1DOT2_VERSION || session->version == DTLSV1DOT2_VERSION ||
+    if (session->version == TLSV1DOT2_VERSION || session->version == DTLSV1DOT2_VERSION ||
             (is_tls13 && (draft_version > 0 && draft_version < 19))) {
         offset = ssl_dissect_hash_alg_list(hf, tvb, tree, pinfo, offset, offset_end);
     }
@@ -8461,6 +8462,7 @@ ssl_dissect_digitally_signed(ssl_common_dissect_t *hf, tvbuff_t *tvb, packet_inf
     guint32     sig_len;
 
     switch (version) {
+    case GMSSLV1_VERSION:
     case TLSV1DOT2_VERSION:
     case DTLSV1DOT2_VERSION:
     case TLSV1DOT3_VERSION:
